@@ -14,8 +14,12 @@ scales: # model compound scaling constants, i.e. 'model=yolov8n.yaml' will call 
 # YOLOv8.0n backbone
 backbone:
   # [from, repeats, module, args]
-  - [-1, 1, Conv, [64, 3, 2]] # 0-P1/2
-  - [-1, 1, Conv, [128, 3, 2]] # 1-P2/4
+  # from: -n表示从前n层获得的输入，-1表示从前一层获得输入
+  # repeats: 表示网络模块的数目
+  # module: 表示网络模块的名称
+  # args: 表示向不同模块内传递的参数，即[channel_out, kernel, stride, padding, groups]，这里没有channel_in，因为输入都是上层的输出
+  - [-1, 1, Conv, [64, 3, 2]] # 0-P1/2    第0层: 使用64个3x3的卷积核，步幅为2进行卷积，得到P1/2特征图
+  - [-1, 1, Conv, [128, 3, 2]] # 1-P2/4   第1层: 使用128个3x3的卷积核，步幅为2进行卷积，得到P2/4特征图
   - [-1, 3, C2f, [128, True]]
   - [-1, 1, Conv, [256, 3, 2]] # 3-P3/8
   - [-1, 6, C2f, [256, True]]
