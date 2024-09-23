@@ -5,31 +5,31 @@ import numpy as np
 
 def load_yolo_labels(label_path):
     """
-    ä»æ–‡ä»¶ä¸­åŠ è½½YOLOæ ‡ç­¾ã€‚
+    ´ÓÎÄ¼şÖĞ¼ÓÔØYOLO±êÇ©¡£
 
-    :param label_path: æ ‡ç­¾æ–‡ä»¶è·¯å¾„
-    :return: YOLOæ ‡ç­¾åˆ—è¡¨ï¼Œæ¯ä¸ªæ ‡ç­¾ä¸º(class_id, center_x, center_y, width, height)
+    :param label_path: ±êÇ©ÎÄ¼şÂ·¾¶
+    :return: YOLO±êÇ©ÁĞ±í£¬Ã¿¸ö±êÇ©Îª(class_id, center_x, center_y, width, height)
     """
     yolo_labels = []
     with open(label_path, 'r') as f:
         for line in f:
-            # è¯»å–æ¯è¡Œå¹¶è§£æä¸º class_id, center_x, center_y, width, height
+            # ¶ÁÈ¡Ã¿ĞĞ²¢½âÎöÎª class_id, center_x, center_y, width, height
             values = list(map(float, line.strip().split()))
             yolo_labels.append(tuple(values))
     return yolo_labels
 
 def plot_yolo_label(image_path, label_path):
     """
-    ç»˜åˆ¶YOLOæ ‡ç­¾çš„è¾¹ç•Œæ¡†ã€‚
+    »æÖÆYOLO±êÇ©µÄ±ß½ç¿ò¡£
 
-    :param image_path: è¾“å…¥å›¾åƒçš„æ–‡ä»¶è·¯å¾„
-    :param label_path: YOLOæ ‡ç­¾æ–‡ä»¶è·¯å¾„
+    :param image_path: ÊäÈëÍ¼ÏñµÄÎÄ¼şÂ·¾¶
+    :param label_path: YOLO±êÇ©ÎÄ¼şÂ·¾¶
     """
-    # ä½¿ç”¨PILæ‰“å¼€å›¾åƒ
+    # Ê¹ÓÃPIL´ò¿ªÍ¼Ïñ
     image = Image.open(image_path)
-    image = np.array(image)  # è½¬æ¢ä¸ºnumpyæ•°ç»„
+    image = np.array(image)  # ×ª»»ÎªnumpyÊı×é
 
-    # åŠ è½½YOLOæ ‡ç­¾
+    # ¼ÓÔØYOLO±êÇ©
     yolo_labels = load_yolo_labels(label_path)
 
     fig, ax = plt.subplots(1)
@@ -40,21 +40,21 @@ def plot_yolo_label(image_path, label_path):
     for label in yolo_labels:
         class_id, center_x, center_y, bbox_width, bbox_height = label
 
-        # YOLOçš„åæ ‡æ˜¯å½’ä¸€åŒ–çš„ï¼Œè¿™é‡Œå°†å®ƒä»¬è½¬æ¢å›åƒç´ å•ä½
+        # YOLOµÄ×ø±êÊÇ¹éÒ»»¯µÄ£¬ÕâÀï½«ËüÃÇ×ª»»»ØÏñËØµ¥Î»
         bbox_width *= image_width
         bbox_height *= image_height
         center_x *= image_width
         center_y *= image_height
 
-        # è®¡ç®—å·¦ä¸Šè§’çš„åæ ‡
+        # ¼ÆËã×óÉÏ½ÇµÄ×ø±ê
         x_min = center_x - (bbox_width / 2)
         y_min = center_y - (bbox_height / 2)
 
-        # åˆ›å»ºä¸€ä¸ªçŸ©å½¢æ¡†å¹¶æ·»åŠ åˆ°å›¾åƒä¸­
+        # ´´½¨Ò»¸ö¾ØĞÎ¿ò²¢Ìí¼Óµ½Í¼ÏñÖĞ
         rect = patches.Rectangle((x_min, y_min), bbox_width, bbox_height, linewidth=2, edgecolor='r', facecolor='none')
         ax.add_patch(rect)
 
-        # æ·»åŠ ç±»åˆ«æ–‡æœ¬
+        # Ìí¼ÓÀà±ğÎÄ±¾
         ax.text(x_min, y_min, f"Class {int(class_id)}", color='white', backgroundcolor='red', fontsize=12)
 
     plt.show()
@@ -64,6 +64,6 @@ def plot_yolo_label(image_path, label_path):
 
 if __name__ == "__main__":
     image_path = "/home/liuyvjie/data/polyps/imagesy/1.jpg"
-label_path = "/home/liuyvjie/data/polyps/labels/1.txt"
+    label_path = "/home/liuyvjie/data/polyps/labels/1.txt"
 
 plot_yolo_label(image_path, label_path)
